@@ -1,35 +1,26 @@
 Rails.application.routes.draw do
+  root to: "public/homes#top"
   namespace :admin do
-    get 'comments/index'
-    get 'comments/show'
+    resources :users, only:[:index,:show,:edit,:update]
+    resources :posts, only:[:index,:show,:edit,:update]
+    resources :comments, only:[:index,:show,:destroy]
+    root to: 'homes#top'
   end
-  namespace :admin do
-    get 'users/index'
-    get 'users/show'
-    get 'users/edit'
+
+  scope module: :public do
+    resources :posts, only: [:new, :index, :show, :edit, :create, :update, :destroy] do
+      resources :comments, only: [:create, :destroy]
+      resource :favorites, only: [:create, :destroy]
+    end
+    get 'users/my_page', to: 'users#show' ,as: :my_page
+    get 'users/information/edit', to: 'users#edit', as: :users_edit
+    patch 'users/information', to: 'users#update'
+    patch 'users/quit', to: 'users#quit'
+    get 'users/withdrawal'
+    get "/about" => "homes#about", as: "about"
+    get "search" => "searches#search"
   end
-  namespace :admin do
-    get 'posts/index'
-    get 'posts/show'
-    get 'posts/edit'
-  end
-  namespace :admin do
-    get 'homes/top'
-  end
-  namespace :public do
-    get 'posts/new'
-    get 'posts/index'
-    get 'posts/show'
-    get 'posts/edit'
-  end
-  namespace :public do
-    get 'users/show'
-    get 'users/edit'
-  end
-  namespace :public do
-    get 'homes/top'
-    get 'homes/about'
-  end
+
   devise_for :users,skip: [:passwords], controllers: {
     registrations: "public/registrations",
     sessions: 'public/sessions'
