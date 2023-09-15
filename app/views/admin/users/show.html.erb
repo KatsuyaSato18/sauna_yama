@@ -1,2 +1,55 @@
-<h1>Admin::Users#show</h1>
-<p>Find me in app/views/admin/users/show.html.erb</p>
+<p id="notice"></p>
+<div>
+  <%= flash[:notice] %>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-10 col-lg-10 px-5 py-5 px-sm-0 ">
+      <div class="form-group row">
+        <span class="bg-light px-2 h4 mb-3"><%= @user.name %>さんの会員詳細</span>
+      </div>
+      <div class="form-group row"> <!-- こちらの全角スペースを削除しました -->
+          <label class="col-3 col-form-label">会員ID</label>
+          <div class="col-4">
+            <%= @user.id %>
+          </div>
+      </div>
+      <div class="form-group row"> <!-- こちらの全角スペースを削除しました -->
+          <label class="col-3 col-form-label">ユーザネーム</label>
+          <div class="col-6">
+            <%= @user.name %>
+          </div>
+      </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label">電話番号</label>
+          <div class="col-4">
+            <%= @user.telephone_number %>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label">メールアドレス</label>
+          <div class="col-4">
+            <%= @user.email %>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label">会員ステータス</label>
+          <div class="col-4">
+            <% if !@user.is_deleted %>
+            <span class="text-success font-weight-bold">有効</span>
+            <% else %>
+            <span class="text-muted font-weight-bold">退会</span>
+            <% end %>
+          </div>
+        </div>
+        <div class="form-group row text-center">
+          <div class="col-4">
+            <a href="<%= edit_admin_user_path %>" class="btn btn-success">編集する</a>
+          </div>
+          <div class="col-4">
+            <a href="<%= admin_posts_path %>" class="btn btn-primary">投稿一覧を見る</a>
+          </div>
+        </div>
+  　</div>
+  </div>
+</div>

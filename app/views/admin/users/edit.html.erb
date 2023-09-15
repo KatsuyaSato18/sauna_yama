@@ -1,2 +1,63 @@
-<h1>Admin::Users#edit</h1>
-<p>Find me in app/views/admin/users/edit.html.erb</p>
+<p id="notice"></p>
+<div>
+  <%= flash[:notice] %>
+</div>
+<% if @user.errors.any? %>
+  <div class="alert alert-danger">
+    <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-10 col-lg-10 px-5 py-5 px-sm-0 ">
+      <div class="form-group row">
+        <span class="bg-light px-2 h4 mb-3"><%= @user.name %>さんの会員情報編集</span>
+      </div>
+      <%= form_with model: [:admin, @user] do |f| %>
+      <div class="form-group row"> <!-- こちらの全角スペースを削除しました -->
+          <label class="col-3 col-form-label">会員ID</label>
+          <div class="col-4">
+            <%= @user.id %>
+          </div>
+      </div>
+      <div class="form-group row"> <!-- こちらの全角スペースを削除しました -->
+          <label class="col-3 col-form-label">ユーザネーム</label>
+          <div class="col-4">
+            <%= f.text_field :name, class:"form-control", id:"inputName" %>
+          </div>
+      </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label">電話番号</label>
+          <div class="col-4">
+            <%= f.text_field :telephone_number, class:"form-control", id:"inputTelephoneNumber" %>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label">メールアドレス</label>
+          <div class="col-4">
+            <%= f.text_field :email, class:"form-control", id:"inputEmail" %>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-3 col-form-label">会員ステータス</label>
+          <div class="col-4">
+            <%= f.radio_button :is_deleted, :false %>
+            <%= f.label :is_deleted, "有効", { value: :false }  %>
+
+            <%= f.radio_button :is_deleted, :true %>
+            <%= f.label :is_deleted, "退会", { value: :true } %>
+          </div>
+        </div>
+        <div class="form-group row text-center">
+          <div class="col-4">
+            <%= f.submit "編集内容を保存", class:"btn btn-success" %>
+          </div>
+        </div>
+      <% end %>
+  　</div>
+  </div>
+</div>
