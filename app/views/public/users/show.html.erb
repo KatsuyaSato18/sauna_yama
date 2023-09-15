@@ -1,2 +1,46 @@
-<h1>Public::Users#show</h1>
-<p>Find me in app/views/public/users/show.html.erb</p>
+<p id="notice"></p>
+<div>
+  <%= flash[:notice] %>
+</div>
+<div class="container">
+  <div class="row justify-content-left">
+    <div class="col-sm-12 col-md-8 col-lg-6 px-5 py-5 px-sm-0 ">
+      <span class="bg-light px-2 h4">マイページ</span>
+      <div class="field row mt-4">
+        <div class="col-4 font-weight-bold">登録情報
+        </div>
+        <div class="row mb-3">
+          <a href="<%= users_edit_path %>" class="btn btn-success">編集する</a>
+        </div>
+        <div class="actions col-8">
+        </div>
+      </div>
+      <table class="table table-bordered ">
+        <tbody>
+          <tr></tr>
+          <tr>
+            <th class="bg-light">ユーザネーム</th>
+            <th><%= @user.name %></th>
+          </tr>
+          <tr>
+            <th class="bg-light">電話番号</th>
+            <th><%= @user.telephone_number %></th>
+          </tr>
+          <tr>
+            <th class="bg-light">メールアドレス</th>
+            <th><%= @user.email %></th>
+          </tr>
+        </tbody>
+      </table>
+      <div class="field row mt-4">
+        <div class="col-4 font-weight-bold">投稿履歴
+        </div>
+        <div class="row mb-3">
+          <a href="<%= posts_path %>" class="btn btn-primary">一覧を見る</a>
+        </div>
+        <div class="actions col-8">
+        </div>
+    　</div>
+    </div>
+  </div>
+</div>
