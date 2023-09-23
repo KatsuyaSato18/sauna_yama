@@ -17,6 +17,7 @@ class Public::PostsController < ApplicationController
 
   def index
     @post = Post.page(params[:page])
+    @posts = Post.order(created_at: :desc).page(params[:page])
   end
 
   def show
@@ -31,6 +32,23 @@ class Public::PostsController < ApplicationController
     end
   end
 
+
+  def update
+    @post = current_user.posts.find_by(id: params[:id])
+    if @post.nil?
+      redirect_to posts_path
+      return
+    end
+
+    if @post.update(book_params)
+      flash[:notice] = "投稿を更新しました."
+      redirect_to post_path(@post.id)
+    else
+      flash[:notice] = "投稿の更新に失敗しました."
+      render :edit
+    end
+  end
+
   def destroy
     post = Post.find(params[:id])
     post.destroy
@@ -41,7 +59,7 @@ class Public::PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :sauna_name, :adress,:image, :caption, :status)
+    params.require(:post).permit(:title, :sauna_name, :address,:image, :caption, :status)
   end
 
 end

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row no-gutters">
     <div class="col-md-5 col-sm-10 mx-2 mx-sm-auto shadow-lg rounded px-0 my-5">
-      <h5 class="text-dark bg-light p-4 mb-0">画像投稿フォーム</h5>
+      <h5 class="text-dark bg-light p-4 mb-0">投稿フォーム</h5>
       <div class="form-body p-4">
         <% if @post.errors.any? %>
           <ul class="alert alert-danger" role="alert">
@@ -14,19 +14,27 @@
           </ul>
         <% end %>
         <%= form_with model: @post do |f| %>
-          <%= f.file_field :image, accept: "image/*", class: "w-100" %>
-          <div class="input-group mb-3 mt-4">
-            <div class="input-group-prepend">
-              <span class="input-group-text" aria-hidden="true"><i class="fas fa-building"></i></span>
-            </div>
+          <div class="mb-4">
+            <i class="fas fa-camera"></i>
+            <%= f.label :image, "カメラ" %>
+            <%= f.file_field :image, accept: "image/*", class: "w-100" %>
+          </div>
+          <div class="mb-3">
+            <%= f.label :title, "タイトル" %>
             <%= f.text_field :title, class:"form-control", placeholder:"タイトル" %>
           </div>
-          <%= f.text_field :sauna_name, class:"form-control", rows:"3", placeholder:"サウナの店名" %>
-          <hr>
-          <%= f.text_field :adress, class:"form-control", rows:"3", placeholder:"〇〇県〇〇市〇〇町..." %>
-          <hr>
-          <%= f.text_area :caption, class:"form-control", rows:"3", placeholder:"コメントここに" %>
-          <hr>
+          <div class="mb-3">
+            <%= f.label :sauna_name, "サウナ店名" %>
+            <%= f.text_field :sauna_name, class:"form-control", placeholder:"サウナの店名" %>
+          </div>
+          <div class="mb-3">
+            <%= f.label :address, "住所" %>
+            <%= f.text_field :address, class:"form-control", placeholder:"〇〇県〇〇市〇〇町..." %>
+          </div>
+          <div class="mb-3">
+            <%= f.label :caption, "説明" %>
+            <%= f.text_area :caption, class:"form-control", rows:"3", placeholder:"コメントここに" %>
+          </div>
           <%= f.submit '投稿', class:"btn btn-lg btn-block btn-info mt-4" %>
         <% end %>
       </div>

@@ -5,6 +5,10 @@ class Post < ApplicationRecord
   has_many :post_tags, dependent: :destroy
   has_one_attached :image
   validates :image, presence: true
+  validates :title, presence: true
+  validates :sauna_name, presence: true
+  validates :address, presence: true
+  validates :caption, presence: true
 
    def get_image
     unless image.attached?
