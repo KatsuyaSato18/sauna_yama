@@ -10,7 +10,7 @@ class Public::PostsController < ApplicationController
       flash[:notice] = "投稿に成功しました."
       redirect_to posts_path
     else
-      flash[:notice] = "投稿に失敗しました."
+      flash[:alert] = "投稿に失敗しました."
       render :new
     end
   end
@@ -40,11 +40,11 @@ class Public::PostsController < ApplicationController
       return
     end
 
-    if @post.update(book_params)
+    if @post.update(post_params)
       flash[:notice] = "投稿を更新しました."
       redirect_to post_path(@post.id)
     else
-      flash[:notice] = "投稿の更新に失敗しました."
+      flash[:alert] = "投稿の更新に失敗しました."
       render :edit
     end
   end
@@ -52,6 +52,7 @@ class Public::PostsController < ApplicationController
   def destroy
     post = Post.find(params[:id])
     post.destroy
+    flash[:notice] = "投稿を削除しました."
     redirect_to posts_path
   end
 

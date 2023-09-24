@@ -1,4 +1,15 @@
 <div class="card w-75 mx-auto mt-4 shadow-lg">
+  <% if flash[:notice] %>
+  <div class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+  <% end %>
   <div class="card-header">
     <%= image_tag @post.get_image, class:"card-img-top"; %>
   </div>
@@ -12,26 +23,28 @@
     <p class="card-text"><i class="fas fa-map-marker-alt"></i> 住所：<%= @post.address %></p>
     <p class="card-text"><%= @post.caption %></p>
     <div class="row">
-      <div class="col-2">
-        <%= image_tag @post.user.get_profile_image(100,100), class:"mt-3 rounded-circle"; %>
+      <div class="col-2 d-flex align-items-end">
+        <%= image_tag @post.user.get_profile_image(100,100), class:"rounded-circle"; %>
       </div>
-      <div class="col">
-        <span><i class="fas fa-user"></i> ユーザネーム：<%= @post.user.name %> ｜ </span>
-        <span>投稿日：<%= @post.created_at.strftime('%Y/%m/%d') %></span>
+      <div class="col d-flex align-items-end">
+        <span><i class="fas fa-user"></i> <%= @post.user.name %></span>
+        <span class="ml-2">｜</span>
+        <span class="ml-2">投稿日：<%= @post.created_at.strftime('%Y/%m/%d') %></span>
       </div>
     </div>
     <div class="mt-3">
       <% if @post.user == current_user %>
-        <%= link_to "削除", post_path(@post), method: :delete, class:"btn btn-danger" %>
+        <%= link_to "編集する", edit_post_path(@post), class:"btn btn-success mr-2" %>
+        <%= link_to "投稿を削除", post_path(@post), method: :delete, class:"btn btn-danger", data: { confirm: "投稿を削除しますか？" }  %>
       <% end %>
 
       <% if @post.favorited_by?(current_user) %>
-        <%= link_to post_favorites_path(@post), method: :delete, class:"btn btn-primary" do %>
-          ♥ <%= @post.favorites.count %> いいね
+        <%= link_to post_favorites_path(@post), method: :delete, class:"btn btn-outline" do %>
+          <i class="fas fa-heart text-danger"></i> <%= @post.favorites.count %> いいね
         <% end %>
       <% else %>
-        <%= link_to post_favorites_path(@post), method: :post, class:"btn btn-outline-primary" do %>
-          ♡ <%= @post.favorites.count %> いいね
+        <%= link_to post_favorites_path(@post), method: :post, class:"btn btn-outline" do %>
+          <i class="far fa-heart"></i> <%= @post.favorites.count %> いいね
         <% end %>
       <% end %>
     </div>
@@ -49,7 +62,7 @@
         <div class="col-10">
           <p><strong><%= comment.user.name %></strong> (<%= comment.created_at.strftime('%Y/%m/%d') %>): <%= comment.comment %></p>
           <% if comment.user == current_user %>
-            <%= link_to "削除", post_post_comment_path(comment.post_id, comment), method: :delete, class:"btn btn-sm btn-danger" %>
+          　<%= link_to "削除", post_comment_path(comment.post_id, comment), method: :delete, class:"btn btn-sm btn-danger", data: { confirm: "コメントを削除しますか？"} %>
           <% end %>
         </div>
       </div>
