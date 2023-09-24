@@ -8,6 +8,9 @@
       <div class="form-group row">
         <span class="bg-light px-2 h4 mb-3"><%= @user.name %>さんの会員詳細</span>
       </div>
+      <div class="form-group row">
+        <%= image_tag @user.get_profile_image(200,150) %>
+      </div>
       <div class="form-group row"> <!-- こちらの全角スペースを削除しました -->
           <label class="col-3 col-form-label">会員ID</label>
           <div class="col-4">

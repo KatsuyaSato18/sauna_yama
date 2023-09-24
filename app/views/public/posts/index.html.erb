@@ -31,7 +31,11 @@
               <strong><i class="fas fa-hot-tub"></i><span> <%= post.sauna_name %></span></strong>
             <% end %>
           </p>
-          <p class="card-text"><%= post.caption %></p>
+          <p class="card-text">
+            <%= link_to post_path(post.id), class:"text-dark" do %>
+            <%= truncate(post.caption, length: 20, separator: ' ', omission: '...') %>
+            <% end %>
+          </p>
 
           <div class="d-flex align-items-center">
             <div class="ml-3">

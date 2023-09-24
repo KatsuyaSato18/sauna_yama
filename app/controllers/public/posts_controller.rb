@@ -1,4 +1,5 @@
 class Public::PostsController < ApplicationController
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
   def new
     @post = Post.new
   end
@@ -34,20 +35,26 @@ class Public::PostsController < ApplicationController
 
 
   def update
-    @post = current_user.posts.find_by(id: params[:id])
-    if @post.nil?
-      redirect_to posts_path
-      return
+    @post = current_user.posts.find(params[:id])
+    @post.assign_attributes(post_params)
+
+    if @post.status == "unpublished"
+      notice_message = "非公開にしました。"
+      redirect_path = posts_path
+    else
+      notice_message = "投稿を更新しました。"
+      redirect_path = post_path(@post)
     end
 
-    if @post.update(post_params)
-      flash[:notice] = "投稿を更新しました."
-      redirect_to post_path(@post.id)
+    if @post.save
+      flash[:notice] = notice_message
+      redirect_to redirect_path
     else
-      flash[:alert] = "投稿の更新に失敗しました."
+      flash.now[:alert] = "投稿の更新に失敗しました。"
       render :edit
     end
   end
+
 
   def destroy
     post = Post.find(params[:id])
@@ -58,6 +65,10 @@ class Public::PostsController < ApplicationController
 
 
   private
+
+  def set_post
+      @post = Post.find(params[:id])
+  end
 
   def post_params
     params.require(:post).permit(:title, :sauna_name, :address,:image, :caption, :status)

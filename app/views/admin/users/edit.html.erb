@@ -18,6 +18,12 @@
         <span class="bg-light px-2 h4 mb-3"><%= @user.name %>さんの会員情報編集</span>
       </div>
       <%= form_with model: [:admin, @user] do |f| %>
+      <div class="form-group row">
+          <label class="col-3 col-form-label">ユーザ画像</label>
+          <div class="col-4">
+            <%= f.file_field :profile_image, placeholder: "Image", accept: "image/*" , class:"form-control-file"%>
+          </div>
+      </div>
       <div class="form-group row"> <!-- こちらの全角スペースを削除しました -->
           <label class="col-3 col-form-label">会員ID</label>
           <div class="col-4">

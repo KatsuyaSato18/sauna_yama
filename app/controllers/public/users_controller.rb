@@ -22,7 +22,7 @@ class Public::UsersController < ApplicationController
       flash[:notice] = "会員情報を更新しました."
       redirect_to my_page_path
     else
-      flash[:notice] = "会員の更新に失敗しました."
+      flash[:alert] = "会員の更新に失敗しました."
       render :edit
     end
   end
@@ -39,7 +39,7 @@ class Public::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name,:telephone_number,:email, :password, :is_deleted)
+    params.require(:user).permit(:name,:telephone_number,:email, :password, :profile_image,:is_deleted)
   end
 
 end

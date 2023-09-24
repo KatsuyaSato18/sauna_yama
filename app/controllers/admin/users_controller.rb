@@ -29,7 +29,7 @@ class Admin::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :telephone_number,:email, :password, :is_deleted)
+    params.require(:user).permit(:name, :telephone_number,:email,:profile_image, :password, :is_deleted)
   end
 
   def authenticate_admin!
