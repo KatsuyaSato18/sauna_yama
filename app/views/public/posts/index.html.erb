@@ -10,11 +10,21 @@
     <%= flash[:alert] %>
   </div>
   <% end %>
+
+  <div class="row d-flex justify-content-between align-items-center mt-3">
+    <div class="col-3"> <!-- タイトルは6カラムを使用 -->
+    </div>
+    <div class="col-3"> <!-- 検索フォームも6カラムを使用 -->
+      <%= render 'search_form' %>
+    </div>
+  </div>
+
   <% @posts.each do |post| %>
   <div class="card w-50 mx-auto mt-4 shadow-lg">
-    <%= link_to post_path(post.id) do %>
+    <%= link_to (current_user ? post_path(post.id) : new_user_session_path) do %>
       <%= image_tag post.get_image, class:"card-img-top", width: 500, height: 450; %>
     <% end %>
+
     <div class="card-body">
       <div class="row">
         <div class="col-2">
@@ -22,18 +32,18 @@
         </div>
         <div class="col-10">
           <h4 class="card-title">
-            <%= link_to(post_path(post.id), class:"text-dark") do %>
+            <%= link_to (current_user ? post_path(post.id) : new_user_session_path), class:"text-dark" do %>
               <strong><%= post.title %></strong>
             <% end %>
           </h4>
           <p class="card-title">
-            <%= link_to(post_path(post.id), class:"text-dark") do %>
+            <%= link_to (current_user ? post_path(post.id) : new_user_session_path), class:"text-dark" do %>
               <strong><i class="fas fa-hot-tub"></i><span> <%= post.sauna_name %></span></strong>
             <% end %>
           </p>
           <p class="card-text">
-            <%= link_to post_path(post.id), class:"text-dark" do %>
-            <%= truncate(post.caption, length: 20, separator: ' ', omission: '...') %>
+            <%= link_to (current_user ? post_path(post.id) : new_user_session_path), class:"text-dark" do %>
+              <%= truncate(post.caption, length: 20, separator: ' ', omission: '...') %>
             <% end %>
           </p>
 
@@ -41,19 +51,28 @@
             <div class="ml-3">
               <i class="fas fa-user"></i> <%= post.user.name %>
             </div>
+            <div class="ml-3">
+              <% post.tags.each do |tag| %>
+                <span class="badge bg-secondary text-white"><%= tag.name %></span>
+              <% end %>
+            </div>
             <div>
-              <% if post.favorited_by?(current_user) %>
+              <% if current_user && post.favorited_by?(current_user) %>
                 <%= link_to post_favorites_path(post), method: :delete, class:"btn btn-outline" do %>
                   <i class="fas fa-heart text-danger"></i> <%= post.favorites.count %> いいね
                 <% end %>
-              <% else %>
+              <% elsif current_user %>
                 <%= link_to post_favorites_path(post), method: :post, class:"btn btn-outline" do %>
                   <i class="far fa-heart"></i> <%= post.favorites.count %> いいね
+                <% end %>
+              <% else %>
+                <%= link_to new_user_session_path, class:"btn btn-outline" do %>
+                  <i class="far fa-heart"></i> いいね（会員限定）
                 <% end %>
               <% end %>
             </div>
             <div class="ml-3">
-              <%= link_to "#{post.comments.count} コメント", post_path(post.id), class:"text-dark" %>
+              <%= link_to (current_user ? "#{post.comments.count} コメント" : "コメント（会員限定）"), (current_user ? post_path(post.id) : new_user_session_path), class:"text-dark" %>
             </div>
           </div>
         </div>

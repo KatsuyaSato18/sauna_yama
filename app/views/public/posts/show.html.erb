@@ -11,7 +11,7 @@
   </div>
   <% end %>
   <div class="card-header">
-    <%= image_tag @post.get_image, class:"card-img-top"; %>
+    <%= image_tag @post.get_image, class:"card-img-top", width: 400, height: 600; %>
   </div>
   <div class="card-body">
     <h4 class="card-title">
@@ -36,7 +36,9 @@
       <% if @post.user == current_user %>
         <%= link_to "編集する", edit_post_path(@post), class:"btn btn-success mr-2" %>
       <% end %>
-
+      <% @post.tags.each do |tag| %>
+        <span class="badge bg-secondary text-white"><%= tag.name %></span>
+      <% end %>
       <% if @post.favorited_by?(current_user) %>
         <%= link_to post_favorites_path(@post), method: :delete, class:"btn btn-outline" do %>
           <i class="fas fa-heart text-danger"></i> <%= @post.favorites.count %> いいね

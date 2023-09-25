@@ -1,12 +1,16 @@
 <div class="container mt-5">
-  <h2>検索結果: "<%= params[:query] %>"</h2>
+  <h2>検索結果: "<%= params[:query] %>" 　 <%= @results.total_count %> 件見つかりました。</h2>
   <% if @results.empty? %>
     <p class="alert alert-warning"><%= @message %>検索結果が見つかりませんでした。</p>
   <% else %>
     <div class="card-list-container py-5">
       <% @results.each do |post| %>
         <div class="card w-50 mx-auto mt-4 shadow-lg">
-          <%= link_to post_path(post.id) do %>
+          <% if user_signed_in? %>
+            <%= link_to post_path(post.id) do %>
+              <%= image_tag post.get_image, class:"card-img-top" %>
+            <% end %>
+          <% else %>
             <%= image_tag post.get_image, class:"card-img-top" %>
           <% end %>
           <div class="card-body">
@@ -16,34 +20,49 @@
               </div>
               <div class="col-9">
                 <h4 class="card-title">
-                  <%= link_to post_path(post.id), class:"text-dark" do %>
+                  <% if user_signed_in? %>
+                    <%= link_to post_path(post.id), class:"text-dark" do %>
+                      <strong><%= post.title %></strong>
+                    <% end %>
+                  <% else %>
                     <strong><%= post.title %></strong>
                   <% end %>
                 </h4>
                 <p class="card-title">
-                  <%= link_to post_path(post.id), class:"text-dark" do %>
+                  <% if user_signed_in? %>
+                    <%= link_to post_path(post.id), class:"text-dark" do %>
+                      <strong><i class="fas fa-hot-tub"></i><span> <%= post.sauna_name %></span></strong>
+                    <% end %>
+                  <% else %>
                     <strong><i class="fas fa-hot-tub"></i><span> <%= post.sauna_name %></span></strong>
                   <% end %>
                 </p>
-                <p class="card-text"><%= post.caption.truncate(70) %></p>
+                <p class="card-text"><%= truncate(post.caption, length: 20, separator: ' ', omission: '...') %></p>
                 <div class="d-flex align-items-center">
                   <div class="ml-4">
                     <i class="fas fa-user"></i> <%= post.user.name %>
                   </div>
-                  <div>
-                    <% if post.favorited_by?(current_user) %>
-                      <%= link_to post_favorites_path(post), method: :delete, class:"btn btn-outline" do %>
-                        <i class="fas fa-heart text-danger"></i> <%= post.favorites.count %> いいね
+                  <% if user_signed_in? %>
+                    <div>
+                      <% if post.favorited_by?(current_user) %>
+                        <%= link_to post_favorites_path(post), method: :delete, class:"btn btn-outline" do %>
+                          <i class="fas fa-heart text-danger"></i> <%= post.favorites.count %> いいね
+                        <% end %>
+                      <% else %>
+                        <%= link_to post_favorites_path(post), method: :post, class:"btn btn-outline" do %>
+                          <i class="far fa-heart"></i> <%= post.favorites.count %> いいね
+                        <% end %>
                       <% end %>
-                    <% else %>
-                      <%= link_to post_favorites_path(post), method: :post, class:"btn btn-outline" do %>
-                        <i class="far fa-heart"></i> <%= post.favorites.count %> いいね
-                      <% end %>
-                    <% end %>
-                  </div>
-                  <div class="ml-3">
-                    <%= link_to "#{post.comments.count} コメント", post_path(post.id), class:"text-dark" %>
-                  </div>
+                    </div>
+                    <div class="ml-3">
+                      <%= link_to "#{post.comments.count} コメント", post_path(post.id), class:"text-dark" %>
+                    </div>
+                  <% else %>
+                    <!-- ここに非会員用の表示やリンクを配置 -->
+                    <div class="ml-auto">
+                      <%= link_to "いいね・コメント（会員限定)", new_user_session_path, class: "btn btn-outline-primary" %>
+                    </div>
+                  <% end %>
                 </div>
               </div>
             </div>

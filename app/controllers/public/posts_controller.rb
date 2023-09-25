@@ -1,4 +1,5 @@
 class Public::PostsController < ApplicationController
+  before_action :authenticate_user!, except: [:index]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   def new
     @post = Post.new
@@ -17,9 +18,17 @@ class Public::PostsController < ApplicationController
   end
 
   def index
-    @post = Post.page(params[:page])
-    @posts = Post.order(created_at: :desc).page(params[:page])
+    if params[:tag_id].present? && params[:tag_id] != ""
+      @posts = Post.joins(:tags).where(tags: { id: params[:tag_id] }).order(created_at: :desc).page(params[:page])
+      tag = Tag.find(params[:tag_id])
+      flash[:notice] = "#{tag.name} のタグに関連する投稿が #{ @posts.count } 件見つかりました。"
+    else
+      @posts = Post.order(created_at: :desc).page(params[:page])
+    end
   end
+
+
+
 
   def show
     @post = Post.find(params[:id])
@@ -71,7 +80,7 @@ class Public::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :sauna_name, :address,:image, :caption, :status)
+    params.require(:post).permit(:title, :sauna_name, :address,:image, :caption, :status, tag_ids: [])
   end
 
 end

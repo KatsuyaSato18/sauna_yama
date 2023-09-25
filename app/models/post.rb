@@ -21,6 +21,7 @@ class Post < ApplicationRecord
   end
 
   def favorited_by?(user)
+    return false unless user
     favorites.exists?(user_id: user.id)
   end
 
