@@ -32,6 +32,10 @@
             <%= f.text_field :address, class:"form-control", placeholder:"〇〇県〇〇市〇〇町..." %>
           </div>
           <div class="mb-3">
+            <%= f.label :tag_ids, "タグを選択" %>
+            <%= f.collection_select :tag_ids, Tag.all, :id, :name, {}, { multiple: true, class: "form-control" } %>
+          </div>
+          <div class="mb-3">
             <%= f.label :caption, "説明" %>
             <%= f.text_area :caption, class:"form-control", rows:"3", placeholder:"コメントここに" %>
           </div>

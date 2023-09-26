@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   end
 
   scope module: :public do
+    get 'liked_post', to: 'favorites#liked_post'
     resources :posts, only: [:new, :index, :show, :edit, :create, :update, :destroy] do
       resources :comments, only: [:create, :destroy]
       resource :favorites, only: [:create, :destroy]

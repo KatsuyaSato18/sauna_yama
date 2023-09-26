@@ -10,6 +10,7 @@ class Post < ApplicationRecord
   validates :sauna_name, presence: true
   validates :address, presence: true
   validates :caption, presence: true
+  validates :tag_ids, presence: true
   enum status: { published: 0, draft: 1,  unpublished: 2 }
 
   def get_image
