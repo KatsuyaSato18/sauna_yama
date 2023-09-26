@@ -1,2 +1,61 @@
-<h1>Admin::Posts#show</h1>
-<p>Find me in app/views/admin/posts/show.html.erb</p>
+<div class="container mt-5">
+  <% if flash[:notice] %>
+  <div class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+  <% end %>
+
+  <div class="card w-75 mx-auto mt-4 shadow-lg">
+    <div class="card-header">
+      <%= image_tag @post.get_image, class:"card-img-top", width: 400, height: 600; %>
+    </div>
+    <div class="card-body">
+      <h4 class="card-title d-flex align-items-center"> <!-- flexbox を使用して要素を整列 -->
+        <strong class="mr-3"><%= @post.title %></strong> <!-- タイトルに右マージンを追加 -->
+        <%= link_to "編集する", edit_admin_post_path(@post), class:"btn btn-success" %>
+      </h4>
+      <p class="card-title">
+        <strong><i class="fas fa-hot-tub"></i><span> 店名：<%= @post.sauna_name %></span></strong>
+      </p>
+      <p class="card-text"><i class="fas fa-map-marker-alt"></i> 住所：<%= @post.address %></p>
+      <p class="card-text"><%= @post.caption %></p>
+      <div class="row">
+        <div class="col-2 d-flex align-items-end">
+          <%= image_tag @post.user.get_profile_image(100,100), class:"rounded-circle"; %>
+        </div>
+        <div class="col d-flex align-items-end">
+          <span><i class="fas fa-user"></i> <%= @post.user.name %></span>
+          <span class="ml-2">｜</span>
+          <span class="ml-2">
+            <% @post.tags.each do |tag| %>
+              <span class="badge bg-secondary text-white"><%= tag.name %></span>
+            <% end %>
+          </span>
+          <span class="ml-2">投稿日：<%= @post.created_at.strftime('%Y/%m/%d') %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card w-75 mx-auto mt-4 shadow-lg">
+    <div class="card-body">
+      <h5 class="card-title">コメント：<%= @post.comments.count %>件</h5>
+      <% @post.comments.each do |comment| %>
+        <div class="row mb-3">
+          <div class="col-2">
+            <%= image_tag comment.user.get_profile_image(100,100), class:"rounded-circle"; %>
+          </div>
+          <div class="col-10">
+            <p><strong><%= comment.user.name %></strong> (<%= comment.created_at.strftime('%Y/%m/%d') %>): <%= comment.comment %></p>
+            <%= link_to "コメントを削除", admin_comment_path(comment), method: :delete, class:"btn btn-sm btn-danger", data: { confirm: "コメントを削除しますか？"} %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

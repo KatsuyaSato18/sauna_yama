@@ -42,10 +42,13 @@
         </tbody>
       </table>
       <div class="field row mt-4">
-        <div class="col-4 font-weight-bold">投稿履歴
+        <div class="col-4 font-weight-bold">投稿
         </div>
-        <div class="row mb-3">
-          <a href="<%= posts_path %>" class="btn btn-primary">一覧を見る</a>
+        <div class="ml-2 mb-3">
+          <a href="<%= new_post_path %>" class="btn btn-success mr-3">新しく投稿する</a>
+        </div>
+        <div class="mb-3">
+          <a href="<%= liked_post_path %>" class="btn btn-danger">いいね！一覧</a>
         </div>
         <div class="actions col-8">
         </div>

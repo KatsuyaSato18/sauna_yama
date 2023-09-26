@@ -1,2 +1,41 @@
-<h1>Admin::Comments#index</h1>
-<p>Find me in app/views/admin/comments/index.html.erb</p>
+<!-- app/views/admin/comments/index.html.erb -->
+
+<div class="container mt-5">
+  <% if flash[:notice] %>
+  <div class="alert alert-success">
+    <%= flash[:notice] %>
+  </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+  <% end %>
+
+  <h2>コメント一覧</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>コメント内容</th>
+        <th>投稿者</th>
+        <th>対象の投稿</th>
+        <th colspan = "3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @comments.each do |comment| %>
+        <tr>
+          <td><%= comment.id %></td>
+          <td><%= comment.comment %></td>
+          <td><%= link_to comment.user.name, admin_user_path(comment.user.id) %></td><!-- 仮定として、ユーザーモデルにname属性が存在するとします -->
+          <td><%= link_to comment.post.title, admin_post_path(comment.post.id) %></td>
+          <td><%= link_to "詳細を確認する", admin_comment_path(comment.id), class: 'btn btn-warning' %></td>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= paginate @comments %>
+</div>

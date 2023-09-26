@@ -1,5 +1,5 @@
 <div class="container mt-5">
-  <h2>検索結果: "<%= params[:query] %>" 　 <%= @results.total_count %> 件見つかりました。</h2>
+  <h2>検索結果: "<%= params[:query] %>" 　 <%= @results.length %> 件見つかりました。</h2>
   <% if @results.empty? %>
     <p class="alert alert-warning"><%= @message %>検索結果が見つかりませんでした。</p>
   <% else %>

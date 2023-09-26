@@ -1,2 +1,19 @@
-<h1>Admin::Comments#show</h1>
-<p>Find me in app/views/admin/comments/show.html.erb</p>
+<div class="container mt-5">
+  <h2>コメント詳細</h2>
+
+  <div class="card mt-4">
+    <div class="card-body">
+      <h4 class="card-title">会員情報</h4>
+      <p>会員ID: <%= @comment.user.id %></p>
+      <p>名前: <%= link_to @comment.user.name ,admin_user_path(@comment.user.id)%></p>
+
+      <h4 class="mt-4">コメント内容</h4>
+      <p><%= @comment.comment %></p>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <%= link_to "コメント一覧に戻る", admin_comments_path, class: "btn btn-primary btn-lg mr-3" %> <!-- mr-3で右のマージンを追加 -->
+    <%= link_to "コメントを削除する", admin_comment_path(@comment), class: "btn btn-danger btn-lg", method: :delete, "data-confirm" => "本当にコメントを削除しますか?" %>
+  </div>
+</div>
