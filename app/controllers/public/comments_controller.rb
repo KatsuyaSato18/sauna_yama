@@ -26,7 +26,7 @@ class Public::CommentsController < ApplicationController
   def ensure_correct_user
     @comment = Comment.find(params[:id])
     unless @comment.user == current_user
-      flash[:notice] = "投稿者以外コメントは削除できません。"
+      flash[:alert] = "投稿者以外コメントは削除できません。"
       redirect_to posts_path
     end
   end

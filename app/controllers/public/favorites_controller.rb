@@ -1,5 +1,5 @@
 class Public::FavoritesController < ApplicationController
-
+  before_action :authenticate_user!
   def liked_post
     @user = current_user
     favorites = Favorite.where(user_id: @user.id).pluck(:post_id)

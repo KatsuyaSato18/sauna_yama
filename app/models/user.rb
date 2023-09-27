@@ -12,7 +12,9 @@ class User < ApplicationRecord
   validates :telephone_number, presence: true
   after_commit :crop_profile_image, if: -> { profile_image.attached? }
 
-
+  def active_for_authentication?
+    super && (is_deleted == false)
+  end
 
   def get_profile_image(width, height)
     unless profile_image.attached?
