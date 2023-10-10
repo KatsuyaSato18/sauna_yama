@@ -33,6 +33,13 @@
       <% end %>
 
       <div class="field row mt-4">
+        <span class="bg-light px-2 mt-4 ">無料で会員体験！（一部利用できない機能があります）</span>
+      </div>
+      <div class="actions mt-4 text-center">
+        <%= button_to 'ゲストログイン', users_guest_sign_in_path, method: :post, class: "btn btn-sm btn-secondary" %>
+      </div>
+
+      <div class="field row mt-4">
         <span class="bg-light px-2 mt-4 ">会員登録がお済みでない方</span>
       </div>
       <div class="row form-group col-10 mt-3">

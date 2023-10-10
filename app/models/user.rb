@@ -12,20 +12,41 @@ class User < ApplicationRecord
   validates :telephone_number, presence: true
   after_commit :crop_profile_image, if: -> { profile_image.attached? }
 
+  def self.guest
+    find_or_create_by!(email: 'guest@example.com') do |user|
+      user.password = SecureRandom.urlsafe_base64
+      user.name = "ゲストユーザ"
+      user.telephone_number = "1234567890"
+      unless user.profile_image.attached?
+        user.profile_image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'no_image.jpg')), filename: 'default-image.jpg', content_type: 'image/jpeg')
+      end
+    end
+  end
+
+  def get_profile_image(width, height)
+    if !self.profile_image.attached? || !self.profile_image.blob.present? || !self.profile_image.service.exist?(self.profile_image.key)
+      self.profile_image.purge # 既存の添付ファイルを削除
+      self.profile_image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'no_image.jpg')), filename: 'default-image.jpg', content_type: 'image/jpeg')
+    end
+
+    profile_image.variant(resize_to_limit: [width, height]).processed
+  end
+
+  def guest?
+    email == 'guest@example.com'
+  end
+
+
   def active_for_authentication?
     super && (is_deleted == false)
   end
 
-  def get_profile_image(width, height)
-    unless profile_image.attached?
-      file_path = Rails.root.join('app', 'assets', 'images', 'no_image.jpg')
-      profile_image.attach(io: File.open(file_path), filename: 'default-image.jpg', content_type: 'image/jpeg')
-    end
-    profile_image.variant(resize_to_limit: [width,height]).processed
-  end
 
   def crop_profile_image
     if profile_image.attached?
+      image_path = profile_image.service.send(:path_for, profile_image.key)
+      return unless File.exist?(image_path)
+
       image = MiniMagick::Image.new(profile_image.service.send(:path_for, profile_image.key))
 
     # アスペクト比が正方形でない場合のクロップ

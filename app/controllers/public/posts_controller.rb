@@ -1,5 +1,6 @@
 class Public::PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
+  before_action :guest_check, only: [:new, :edit, :update, :destroy]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   def new
     @post = Post.new
@@ -72,8 +73,15 @@ class Public::PostsController < ApplicationController
     redirect_to posts_path
   end
 
-
   private
+
+  def guest_check
+    if current_user&.guest?
+      flash[:alert] = "投稿するには会員登録が必要です。"
+      redirect_to root_path
+    end
+  end
+
 
   def set_post
       @post = Post.find(params[:id])

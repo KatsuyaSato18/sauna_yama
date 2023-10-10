@@ -1,5 +1,6 @@
 class Public::UsersController < ApplicationController
   before_action :authenticate_user!
+  before_action :guest_check, only: [:edit, :update,:destroy, :withdrawal, :quit]
   def show
     @user = current_user
   end
@@ -38,6 +39,13 @@ class Public::UsersController < ApplicationController
   end
 
   private
+
+  def guest_check
+    if current_user&.guest?
+      flash[:alert] = "ゲストユーザは会員編集できません。"
+      redirect_to my_page_path
+    end
+  end
 
   def user_params
     params.require(:user).permit(:name,:telephone_number,:email, :password, :profile_image,:is_deleted)
