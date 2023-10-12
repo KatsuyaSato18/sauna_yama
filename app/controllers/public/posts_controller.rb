@@ -45,9 +45,14 @@ class Public::PostsController < ApplicationController
 
 
   def update
-    @post = current_user.posts.find(params[:id])
-    @post.assign_attributes(post_params)
+    @post = current_user.posts.find_by(id: params[:id])
 
+    if @post.nil?
+      flash[:alert] = "不正なアクセスです。"
+      redirect_to posts_path and return
+    end
+
+    @post.assign_attributes(post_params)
     if @post.status == "unpublished"
       notice_message = "非公開にしました。"
       redirect_path = posts_path
@@ -65,13 +70,19 @@ class Public::PostsController < ApplicationController
     end
   end
 
-
   def destroy
-    post = Post.find(params[:id])
+    post = current_user.posts.find_by(id: params[:id])
+
+    if post.nil?
+      flash[:alert] = "不正なアクセスです。"
+      redirect_to posts_path and return
+    end
+
     post.destroy
-    flash[:notice] = "投稿を削除しました."
+    flash[:notice] = "投稿を削除しました。"
     redirect_to posts_path
   end
+
 
   private
 

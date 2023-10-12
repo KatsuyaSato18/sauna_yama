@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_one_attached :profile_image
   validates :name, presence: true
   validates :telephone_number, presence: true
+  validates :profile_image, presence: true
   after_commit :crop_profile_image, if: -> { profile_image.attached? }
 
   def self.guest

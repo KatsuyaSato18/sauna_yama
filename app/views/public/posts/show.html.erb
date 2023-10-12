@@ -17,7 +17,7 @@
     <h4 class="card-title d-flex align-items-center"> <!-- flexbox を使用して要素を整列 -->
         <strong class="mr-3"><%= @post.title %></strong> <!-- タイトルに右マージンを追加 -->
         <% if @post.user == current_user %>
-          <%= link_to "編集する", edit_admin_post_path(@post), class:"btn btn-success" %>
+          <%= link_to "編集する", edit_post_path(@post), class:"btn btn-success" %>
         <% end %>
     </h4>
     <p class="card-title">
