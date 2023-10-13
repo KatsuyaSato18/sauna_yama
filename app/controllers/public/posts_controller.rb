@@ -2,22 +2,6 @@ class Public::PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   before_action :guest_check, only: [:new, :edit, :update, :destroy]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
-  def new
-    @post = Post.new
-  end
-
-  def create
-    @post = Post.new(post_params)
-    @post.user_id = current_user.id
-    if @post.save
-      flash[:notice] = "投稿に成功しました."
-      redirect_to posts_path
-    else
-      flash[:alert] = "投稿に失敗しました."
-      render :new
-    end
-  end
-
   def index
     if params[:tag_id].present? && params[:tag_id] != ""
       @posts = Post.joins(:tags).where(tags: { id: params[:tag_id] }).order(created_at: :desc).page(params[:page])
@@ -27,13 +11,12 @@ class Public::PostsController < ApplicationController
       @posts = Post.order(created_at: :desc).page(params[:page])
     end
   end
-
-
-
-
   def show
     @post = Post.find(params[:id])
     @comment = Comment.new
+  end
+  def new
+    @post = Post.new
   end
 
   def edit
@@ -42,7 +25,17 @@ class Public::PostsController < ApplicationController
       redirect_to posts_path
     end
   end
-
+  def create
+    @post = Post.new(post_params)
+    @post.user_id = current_user.id
+    if @post.save
+      flash[:notice] = "投稿に成功しました."
+      redirect_to posts_path
+    else
+      flash.now[:alert] = "投稿に失敗しました."
+      render :new
+    end
+  end
 
   def update
     @post = current_user.posts.find_by(id: params[:id])

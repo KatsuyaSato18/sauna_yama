@@ -19,15 +19,15 @@ class User < ApplicationRecord
       user.name = "ゲストユーザ"
       user.telephone_number = "1234567890"
       unless user.profile_image.attached?
-        user.profile_image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'no_image.jpg')), filename: 'default-image.jpg', content_type: 'image/jpeg')
+        user.profile_image.attach(io: Rails.root.join("app/assets/images/no_image.jpg").open, filename: 'default-image.jpg', content_type: 'image/jpeg')
       end
     end
   end
 
   def get_profile_image(width, height)
-    if !self.profile_image.attached? || !self.profile_image.blob.present? || !self.profile_image.service.exist?(self.profile_image.key)
+    if !self.profile_image.attached? || self.profile_image.blob.blank? || !self.profile_image.service.exist?(self.profile_image.key)
       self.profile_image.purge # 既存の添付ファイルを削除
-      self.profile_image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'no_image.jpg')), filename: 'default-image.jpg', content_type: 'image/jpeg')
+      self.profile_image.attach(io: Rails.root.join("app/assets/images/no_image.jpg").open, filename: 'default-image.jpg', content_type: 'image/jpeg')
     end
 
     profile_image.variant(resize_to_limit: [width, height]).processed
