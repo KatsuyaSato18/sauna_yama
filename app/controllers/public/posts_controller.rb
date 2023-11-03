@@ -37,6 +37,8 @@ class Public::PostsController < ApplicationController
     end
   end
 
+
+
   def update
     @post = current_user.posts.find_by(id: params[:id])
 
