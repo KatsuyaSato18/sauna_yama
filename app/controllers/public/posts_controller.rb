@@ -3,6 +3,14 @@ class Public::PostsController < ApplicationController
   before_action :guest_check, only: [:new, :edit, :update, :destroy]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   def index
+    if current_user
+    # ログインしているユーザーの投稿のみを表示
+      @posts = current_user.posts.order(created_at: :desc).page(params[:page])
+    else
+    # 公開されている投稿のみを表示
+      @posts = Post.published.order(created_at: :desc).page(params[:page])
+    end
+
     if params[:tag_id].present? && params[:tag_id] != ""
       @posts = Post.joins(:tags).where(tags: { id: params[:tag_id] }).order(created_at: :desc).page(params[:page])
       tag = Tag.find(params[:tag_id])
