@@ -33,6 +33,7 @@ class Public::PostsController < ApplicationController
       redirect_to posts_path
     end
   end
+  
   def create
     @post = Post.new(post_params)
     @post.user_id = current_user.id
@@ -44,8 +45,6 @@ class Public::PostsController < ApplicationController
       render :new
     end
   end
-
-
 
   def update
     @post = current_user.posts.find_by(id: params[:id])
@@ -95,7 +94,6 @@ class Public::PostsController < ApplicationController
       redirect_to root_path
     end
   end
-
 
   def set_post
       @post = Post.find(params[:id])
