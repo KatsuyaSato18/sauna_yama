@@ -21,7 +21,6 @@ class Admin::SessionsController < Devise::SessionsController
 
    protected
 
-
   def reject_admin
     if params.dig(:admin, :email).blank? || params.dig(:admin, :password).blank?
       flash[:notice] = "項目を入力してください。"
