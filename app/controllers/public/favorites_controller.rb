@@ -1,6 +1,7 @@
 class Public::FavoritesController < ApplicationController
   before_action :authenticate_user!
   before_action :guest_check, only: [:liked_post, :create, :destroy]
+
   def liked_post
     @user = current_user
     favorites = Favorite.where(user_id: @user.id).pluck(:post_id)
