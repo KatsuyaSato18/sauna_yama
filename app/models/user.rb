@@ -42,7 +42,6 @@ class User < ApplicationRecord
     super && (is_deleted == false)
   end
 
-
   def crop_profile_image
     if profile_image.attached?
       image_path = profile_image.service.send(:path_for, profile_image.key)
@@ -67,6 +66,4 @@ class User < ApplicationRecord
       end
     end
   end
-
-
 end
