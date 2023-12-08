@@ -37,7 +37,6 @@ class User < ApplicationRecord
     email == 'guest@example.com'
   end
 
-
   def active_for_authentication?
     super && (is_deleted == false)
   end
